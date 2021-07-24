@@ -31,5 +31,15 @@
                    <p> <b>Email: </b>{{business.business_email}} </p>
                 </div>
                 {% endfor %}
+    
+<a class="btn btn-sm" style="background-color:#D5AFD4;" href="{% url 'post' hood.id%}">Create Post</a>
+ {% for post in posts %}
+<div class="card p-4">
+<h5> {{post.title}}</h5>
+<p>{{post.post}}</p>
+<p class="text-muted">{{post.date}}</p>
+</div>
+{% endfor %}
+
 
 {% endblock %}
