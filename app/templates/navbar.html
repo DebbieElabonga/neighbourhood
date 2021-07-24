@@ -1,0 +1,43 @@
+{% load static %}
+<nav id="sidebar" class="">
+    <div class="sidebar-header ">
+        <h3><a href="">HooD</a></h3>
+    </div>
+    {% if user.is_authenticated %}
+    <ul class="list-unstyled components mr-2 ml-2">
+        <li class="mb-4">
+            <a href="{% url 'dashboard' %}">
+                <i class="fas fa-home"></i>
+                &nbsp; Hoods
+            </a>
+
+        </li>
+        <hr>
+        <li class="mb-4">
+            <a href="{% url 'profile' user.username  %}">
+                <i class="fas fa-user"></i>&nbsp;
+                &nbsp; My Profile
+            </a>
+        </li>
+        <hr>
+        {% if user.profile.hood %}
+        <li class="mb-4">
+            <a href="{% url 'hood' user.profile.hood.id %}">
+                <i class="fas fa-door-open"></i>&nbsp;
+                &nbsp; My Hood
+            </a>
+        </li>
+        <hr>
+        {%else%}
+        {%endif%}
+        <li class="mb-4">
+            <a href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i>&nbsp;
+                &nbsp; Logout
+            </a>
+        </li>
+        <hr>
+    </ul>
+
+    {% endif%}
+</nav>

@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from app.models import *
-from app.forms import *
 from django.contrib.auth import login, authenticate
+from app.forms import *
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from app.models import *
+
 # Create your views here.
 def dashboard(request):
     hood = Hood.objects.all()
@@ -23,21 +26,27 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
-    
+
+@login_required(login_url='login')
 def join_hood(request, id):
     hood = get_object_or_404(Hood, id=id)
     request.user.profile.hood = hood
     request.user.profile.save()
     return redirect('dashboard')
 
-
+@login_required(login_url='login')
 def leave_hood(request, id):
     hood = get_object_or_404(Hood, id=id)
     request.user.profile.hood = None
     request.user.profile.save()
     return redirect('dashboard')
 
+@login_required(login_url='login')
 def profile(request, username):
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile(user=request.user)
     if request.method == 'POST':
         prof_form = UpdateUserProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if prof_form.is_valid():
