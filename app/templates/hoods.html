@@ -1,0 +1,19 @@
+{% block content%}
+  
+    {% for hood in hood %}
+<img class="card-img-top" src="{{hood.image.url}}" alt="Card image cap">
+{{hood.name}}
+<p><b>Location:</b> {{hood.location}}</p>
+<div class="card-footer">
+  {% if request.user.profile.hood == hood %}
+  <small class="text-muted"><a href="{% url 'leave-hood' hood.id %}" class="btn btn-outline-danger btn-sm">Leave
+      Hood</a></small>
+  {% elif not request.user.profile.hood %}
+  <small class="text-muted"><a href="{% url 'join-hood' hood.id %}" class="btn btn-primary btn-sm">Join
+      Hood</a></small>
+  {% endif %}
+ 
+</div>
+    {% endfor %}
+ 
+{% endblock %}
