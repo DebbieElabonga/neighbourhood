@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from app.models import *
+from app.forms import *
 
 # Create your views here.
 def dashboard(request):
@@ -21,3 +22,17 @@ def leave_hood(request, id):
     request.user.profile.hood = None
     request.user.profile.save()
     return redirect('dashboard')
+
+def profile(request, username):
+    if request.method == 'POST':
+        prof_form = UpdateUserProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if prof_form.is_valid():
+            prof_form.save()
+            return redirect(request.path_info)
+    else:
+        prof_form = UpdateUserProfileForm(instance=request.user.profile)
+
+    context = {
+        'prof_form': prof_form,
+         }
+    return render(request, 'profile.html', context)
