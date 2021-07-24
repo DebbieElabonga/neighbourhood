@@ -36,3 +36,16 @@ def profile(request, username):
         'prof_form': prof_form,
          }
     return render(request, 'profile.html', context)
+def hood(request, id):
+    hood = Hood.objects.get(id=id)
+    members = Profile.objects.filter(hood=hood)
+    business = Business.objects.filter(hood=hood)
+    posts = Post.objects.filter(hood=hood)
+    
+    context = {
+        'hood': hood,
+        'business': business,
+        'posts': posts,
+        'members':members,
+    }
+    return render(request, 'myhood.html', context)
