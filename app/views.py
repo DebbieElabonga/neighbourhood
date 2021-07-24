@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from app.models import *
 from app.forms import *
-
+from django.contrib.auth import login, authenticate
 # Create your views here.
 def dashboard(request):
     hood = Hood.objects.all()
@@ -10,6 +10,20 @@ def dashboard(request):
     }
     return render(request, 'hoods.html',context)
 
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('dashboard')
+    else:
+        form = SignUpForm()
+    return render(request, 'signup.html', {'form': form})
+    
 def join_hood(request, id):
     hood = get_object_or_404(Hood, id=id)
     request.user.profile.hood = hood
@@ -77,3 +91,4 @@ def post(request, id):
     else:
         form = PostForm()
     return render(request, 'post.html', {'form': form})
+
